@@ -1,53 +1,49 @@
+// Import necessary modules and models
 const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // The `/api/products` endpoint
 
-// get all products
+// Route to get all products
 router.get('/', async (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
   try {
+    // Retrieve all products and include associated Category and Tag data
     const productData = await Product.findAll({
       include: [{ model: Category }, { model: Tag }],
     });
+    // Respond with the retrieved product data
     res.status(200).json(productData);
   } catch (err) {
+    // Handle errors and respond with a 500 status code
     res.status(500).json(err);
   }
 });
 
-// get one product
+// Route to get a specific product by ID
 router.get('/:id', async (req, res) => {
   try {
+    // Find a product by its primary key (ID) and include associated Category and Tag data
     const productData = await Product.findByPk(req.params.id, {
       include: [{ model: Category }, { model: Tag }],
     });
+    // If no product is found with the given ID, respond with a 404 status code
     if (!productData) {
       res.status(404).json({ message: 'No product found with this id' });
       return;
     }
+    // Respond with the retrieved product data
     res.status(200).json(productData);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-// create new product
+// Route to create a new product
 router.post('/', async (req, res) => {
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
-
   try {
+    // Create a new product with the data provided in the request body
     const productData = await Product.create(req.body);
-
-    // If there's product tags, we need to create pairings to bulk create in the ProductTag model
+    // If there are product tags, we need to create pairings to bulk create in the ProductTag model
     if (req.body.tagIds && req.body.tagIds.length) {
       const productTagIdArr = req.body.tagIds.map((tag_id) => {
         return {
@@ -57,9 +53,11 @@ router.post('/', async (req, res) => {
       });
       await ProductTag.bulkCreate(productTagIdArr);
     }
-    res.status(200).json(productData);
+    // Respond with the created product data and a 201 status code
+    res.status(201).json(productData);
   } catch (err) {
-    res.status(500).json(err);
+    // Handle validation errors and respond with a 400 status code
+    res.status(400).json(err);
   }
 });
 
@@ -111,30 +109,34 @@ router.put('/:id', async (req, res) => {
 
     // Fetch the updated product and respond
     const updatedProduct = await Product.findByPk(req.params.id);
-    res.json(updatedProduct);
+    res.status(200).json(updatedProduct);
   } catch (err) {
-    console.error(err);
-    res.status(400).json(err);
-  }
-});
-
-router.delete('/:id', async (req, res) => {
-  // delete one product by its `id` value
-  try {
-    const deleted = await Product.destroy({
-      where: {
-        id: req.params.id,
-      },
-    }
-    )
-    if (!deleted) {
-      res.status(404).json({ message: 'No product found with this id' });
-      return;
-    }
-    res.status(200).json(deleted);
-  } catch (err) {
+    // Handle errors and respond with a 500 status code
     res.status(500).json(err);
   }
 });
 
+// Route to delete a product by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    // Delete the product with the given ID
+    const deleted = await Product.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    // If no product is found with the given ID, respond with a 404 status code
+    if (!deleted) {
+      res.status(404).json({ message: 'No product found with this id' });
+      return;
+    }
+    // Respond with the deleted product data
+    res.status(200).json(deleted);
+  } catch (err) {
+    // Handle errors and respond with a 500 status code
+    res.status(500).json(err);
+  }
+});
+
+// Export the router
 module.exports = router;
