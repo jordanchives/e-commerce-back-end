@@ -19,7 +19,6 @@ The E-commerce Backend is an Express.js application that provides RESTful API en
 ## Files
 
 - `server.js`: Entry point for the application. Defines the Express server and sets up middleware.
-- `package.json`: Contains metadata about the project and defines scripts for starting the server, watching for changes, and seeding the database.
 - `.env.EXAMPLE`: Example environment file for configuring database connection parameters.
 - `seeds/index.js`: Script for seeding the database with initial data.
 - `routes/index.js`: Defines the main router and imports routes for categories, products, and tags.
@@ -61,7 +60,7 @@ The E-commerce Backend is an Express.js application that provides RESTful API en
 4. Create a `.env` file based on the provided `.env.EXAMPLE` and fill in the required database connection parameters.
 
 5. Create your MySQL database by executing the schema script provided in the `db/` directory.
-    
+
 6. Seed the database with initial data:
 
     ```bash
@@ -146,6 +145,14 @@ DB_PW=''
 - `tag_id`: Integer, References Tag Model.
 
 ## Preview
+
+### Video Preview
+
+A video preview of the application can be found [here](https://jordanchives.github.io/e-commerce-back-end/assets/index.html)
+
+### Screenshots
+
+![Insomnia](/assets/insomnia.png)
 
 ## License
 
