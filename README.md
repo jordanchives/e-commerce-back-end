@@ -146,13 +146,8 @@ DB_PW=''
 
 ## Preview
 
-### Video Preview
-
 A video preview of the application can be found [here](https://jordanchives.github.io/e-commerce-back-end/assets/index.html)
 
-### Screenshots
-
-![Insomnia](/assets/insomnia.png)
 
 ## License
 
